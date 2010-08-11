@@ -9,10 +9,21 @@ include REXML
 
 class Cmdr
 
-  def initialize(opt={})
+  def initialize(main_opt={})
+    opt = {
+      public: 
+      {alias: {},
+       user: 
+        {'-1' => history: 
+          {list: [], index: []}
+        }
+      }, 
+      config: 
+      {bottom_up_display: true}
+    }.merge(main_opt)
+    
     @v = opt[:public]
-    o = {bottom_up_display: true}.merge(opt[:config])
-    @bottom_up_display = o[:bottom_up_display]
+    @bottom_up_display = opt[:config][:bottom_up_display]
     super()
   end
 
@@ -72,7 +83,7 @@ class Cmdr
     end
     
     javascript = []
-    javascript << @bottom_up_display == true ? listmite(out) : listite(out) 
+    javascript << (@bottom_up_display == true ? listmite(out) : listite(out))
     javascript << job_with_js
 
     xml = Builder::XmlMarkup.new( :target => buffer='', :indent => 2 )
