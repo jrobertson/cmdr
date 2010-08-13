@@ -9,27 +9,26 @@ include REXML
 
 class Cmdr
 
-  def initialize(main_opt={}, app_mgr=nil)
-    opt = {
-      public:  {alias: {},
-      user: 
+  def initialize(opt={}, app_mgr=nil)
+    
+      opt[:public].merge!({
+        alias: {},
+        user: 
         {'-1' => 
           {
             history: 
             {list: [], index: []}
           }
         }
-      }, 
-      config: {bottom_up_display: true}
-    }.merge(main_opt)
+      })        
     
     @v = opt[:public]
-    @bottom_up_display = opt[:config][:bottom_up_display]
+    @bottom_up_display = opt[:config] and opt[:config][:bottom_up_display] ? opt[:config][:bottom_up_display] : true
     @@app = app_mgr
+
     super()
   end
 
-  # still to ,,, uimpl,ent rub+projectx
   
   def run_cmd(raw_command, user_id='-1')
 
