@@ -11,16 +11,15 @@ class Cmdr
 
   def initialize(opt={}, app_mgr=nil)
     
-      opt[:public].merge!({
-        alias: {},
-        user: 
-        {'-1' => 
-          {
-            history: 
-            {list: [], index: []}
-          }
+    opt[:public].merge!({
+      user: 
+      {'-1' => 
+        {
+          history: 
+          {list: [], index: []}
         }
-      })        
+      }
+    })        
     
     @v = opt[:public]
     @bottom_up_display = opt[:config] and opt[:config][:bottom_up_display] ? opt[:config][:bottom_up_display] : true
@@ -36,9 +35,9 @@ class Cmdr
 
     command, options_string = raw_command[/\w+/], ($').strip
 
-    aliasx = @v[:alias]
-    if aliasx.has_key? command then
-      command, options_string2 = aliasx[command][/\w+/], ($').strip 
+    
+    if @v[:alias].has_key? command then
+      command, options_string2 = @v[:alias][command][/\w+/], ($').strip 
       options_string = options_string2 + ' '+ options_string
     end
 
