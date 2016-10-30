@@ -35,7 +35,7 @@ class Cmdr
       if result then
         display_output("\n" + result)
       else
-        display_output 'command not found >> '  + @linebuffer.inspect
+        display_output "\n" + 'command not found >> '  + @linebuffer.inspect
       end
 
       @linebuffer = ''
