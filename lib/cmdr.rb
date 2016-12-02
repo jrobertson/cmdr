@@ -9,17 +9,16 @@ class Cmdr
 
     @linebuffer = ''
     @history = []
-    @out = []
 
   end
 
-  def input(c, enter: "\r", backspace: "\u007F", arrowup: :arrow_up)
+  def input(c, enter: "\r", backspace: "\u007F", arrowup: :arrow_up, arrowdown: :arrow_down)
 
     key = c
-
+    #return 'var r="e";'
     reveal(c)
     
-    @out << case key
+    case key
     when enter
        
       command = @linebuffer 
@@ -30,13 +29,16 @@ class Cmdr
         return clear_cli()
       end      
       
-      result = yield(@linebuffer)
       
+      result = yield(@linebuffer.sub(/^\:/,''))
+
       if result then
         display_output("\n" + result)
       else
         display_output "\n" + 'command not found >> '  + @linebuffer.inspect
       end
+     
+      result = false
 
       @linebuffer = ''
       clear_cli()
@@ -48,6 +50,8 @@ class Cmdr
       old_command = @history.last
       @linebuffer = old_command
       cli_update old_command
+    when arrowdown
+      #puts 'arrowdown'
     else
     
       if key.length < 2  then
@@ -59,6 +63,8 @@ class Cmdr
     end
 
   end
+  
+
 
   # display the cli banner upon initialisation
   #

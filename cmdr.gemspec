@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'cmdr'
-  s.version = '0.4.1'
+  s.version = '0.4.2'
   s.summary = 'cmdr'
   s.authors = ['James Robertson']
   s.files = Dir['lib/cmdr.rb']
