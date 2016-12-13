@@ -5,15 +5,17 @@
 
 class Cmdr
 
+  
   def initialize()
 
     @linebuffer = ''
     @history = []
+    @history_index = -1
 
   end
 
   def input(c, enter: "\r", backspace: "\u007F", arrowup: :arrow_up, arrowdown: :arrow_down)
-
+    
     key = c
     #return 'var r="e";'
     reveal(c)
@@ -23,7 +25,7 @@ class Cmdr
        
       command = @linebuffer 
       
-      @history << command 
+      @history << command unless @history.last == command or command.empty?
       
       if @linebuffer.length < 1 then
         return clear_cli()
@@ -42,16 +44,32 @@ class Cmdr
 
       @linebuffer = ''
       clear_cli()
+      @history_index = -1
 
     when backspace
       @linebuffer.chop!
       cli_update()
     when arrowup
-      old_command = @history.last
-      @linebuffer = old_command
-      cli_update old_command
+
+      return if @history.empty? 
+
+      
+      clear_cli()
+      command = @history[@history_index]
+      @linebuffer = command
+      @history_index -= 1 if @history_index > -(@history.length)
+      cli_update command
+
     when arrowdown
-      #puts 'arrowdown'
+      
+      return if @history.empty? or @history_index == -1
+      
+      clear_cli()
+      @history_index += 1      
+      command = @history[@history_index]
+      @linebuffer = command
+      cli_update command
+
     else
     
       if key.length < 2  then
@@ -71,16 +89,21 @@ class Cmdr
   def cli_banner()
     print "> "
   end
+  
+  def history()
+    cli_update @history.map.with_index {|x,i| " %s %s" % [i, x]}.join("\n")    
+  end
 
   protected
   
   # display the current input
   #
-  def cli_update(s='')
+  def cli_update(s='') 
     print s
   end
 
-  alias clear_cli cli_update
+  def clear_cli()
+  end
 
   # display the output
   #
